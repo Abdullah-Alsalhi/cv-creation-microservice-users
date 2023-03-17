@@ -1,4 +1,4 @@
-"""techstore URL Configuration
+"""cv-creation URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
