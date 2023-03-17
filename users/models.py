@@ -22,5 +22,9 @@ class User(AbstractUser):
     last_name = models.CharField(
         null=True, blank=True, max_length=32, verbose_name='last name')
 
+    USERNAME_FIELD = 'email'
+    EMAIL_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
     class Meta:
         ordering = ['date_joined']
