@@ -13,6 +13,25 @@ from rest_framework_simplejwt.tokens import AccessToken
 
 
 @api_view(['POST'])
+def login(request: Request) -> Response:
+    data = JSONParser().parse(request)
+    serializer = SerializerUser(data=data)
+
+    username = str(request.data.get("username"))
+    password = str(request.data.get("password"))
+    if serializer.is_valid():
+
+        user = authenticate(request, username=username, password=password)
+    # user = authenticate(request, email=email, password=password)
+    if user is None:
+
+        return Response({"msg": "user not found, please check your credentials"})
+
+    token = str(AccessToken.for_user(user=user))
+    return Response({"msg": "logged in", "token": token})
+
+
+@api_view(['POST'])
 def register(request: Request) -> Response:
     """ register a new account """
     data = JSONParser().parse(request)
