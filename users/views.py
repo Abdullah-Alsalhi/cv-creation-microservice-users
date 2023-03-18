@@ -10,21 +10,33 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import AccessToken
+from django.contrib.auth.base_user import BaseUserManager
+
 # Create your views here.
 
 
 @api_view(['POST'])
-def register(request: Request) -> Response:
+def register_user(request: Request) -> Response:
     """ register a new account """
+
     data = JSONParser().parse(request)
+
+    try:
+        data['email'] = data['email'].lower()
+    except:
+        pass
+
     serializer: SerializerUser = SerializerUser(data=data)
+
     if serializer.is_valid():
+
         try:
             user = serializer.create(data)
             token = str(AccessToken.for_user(user=user))
             user = model_to_dict(
                 user, exclude=['password', 'id', 'last_login', 'date_joined'])
             return Response({"msg": "created user succefully", "data": user, "access_token": token}, status=status.HTTP_201_CREATED)
+
         except:
             return Response({"errors": "Internal server issue"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -32,40 +44,21 @@ def register(request: Request) -> Response:
 
 
 @api_view(['POST'])
-def login(request: Request) -> Response:
-    user = None
-    data = JSONParser().parse(request)
-    serializer: SerializerUser = SerializerUser(data=data)
-    email = data.get("email")
-    password = data.get("password")
-    user = authenticate(request, email=email, password=password)
-    print(user)
-    if serializer.is_valid():
-
-        print(user)
-    # user = authenticate(request, email=email, password=password)
-    if user is None:
-
-        return Response({"msg": "user not found, please check your credentials"})
-
-    token = str(AccessToken.for_user(user=user))
-    return Response({"msg": "logged in", "token": token})
-
-
-@api_view(['POST'])
 def login_user(request: Request) -> Response:
-    user = None
-    data = JSONParser().parse(request)
-    email = str(data.get("email"))
-    password = str(data.get("password"))
-    user = authenticate(request, email=email, password=password)
-    if user is None:
 
+    data = JSONParser().parse(request)
+    email = BaseUserManager.normalize_email(str(data.get("email"))).lower()
+    password = str(data.get("password"))
+
+    user = authenticate(request, email=email, password=password)
+
+    if user is None:
         return Response({"errors:": "A user with this email and password is not found."}, status=status.HTTP_400_BAD_REQUEST)
 
     token = str(AccessToken.for_user(user=user))
+    user = model_to_dict(user, exclude=['id', 'password', 'data_joined'])
 
-    return Response({"msg": "logged in", "token": token})
+    return Response({"data": user, "access_token": token})
 
 
 """
