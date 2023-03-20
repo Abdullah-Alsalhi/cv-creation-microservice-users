@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import status
 from rest_framework.parsers import JSONParser
-from .models import User
+from .models import User, UserManager
 from .serializer import SerializerUser
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -21,10 +21,8 @@ def register_user(request: Request) -> Response:
 
     data = JSONParser().parse(request)
 
-    try:
+    if data['email']:
         data['email'] = data['email'].lower()
-    except:
-        pass
 
     serializer: SerializerUser = SerializerUser(data=data)
 
@@ -34,7 +32,7 @@ def register_user(request: Request) -> Response:
             user = serializer.create(data)
             token = str(AccessToken.for_user(user=user))
             user = model_to_dict(
-                user, exclude=['password', 'id', 'last_login', 'date_joined'])
+                user, exclude=['password', 'last_login', 'date_joined'])
             return Response({"msg": "created user succefully", "data": user, "access_token": token}, status=status.HTTP_201_CREATED)
 
         except:
@@ -47,16 +45,15 @@ def register_user(request: Request) -> Response:
 def login_user(request: Request) -> Response:
 
     data = JSONParser().parse(request)
-    email = BaseUserManager.normalize_email(str(data.get("email"))).lower()
+    email = UserManager.normalize_email(str(data.get("email"))).lower()
     password = str(data.get("password"))
-
     user = authenticate(request, email=email, password=password)
 
     if user is None:
-        return Response({"errors:": "A user with this email and password is not found."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"errors:": "Wrong credentital provided"}, status=status.HTTP_400_BAD_REQUEST)
 
     token = str(AccessToken.for_user(user=user))
-    user = model_to_dict(user, exclude=['id', 'password', 'data_joined'])
+    user = model_to_dict(user, exclude=['password', 'data_joined'])
 
     return Response({"data": user, "access_token": token})
 
@@ -86,3 +83,10 @@ def register_user(request : Request) -> Response :
 	return Response({"Error" :user.errors}, status=status.HTTP_400_BAD_REQUEST)
 
  """
+
+
+@api_view(['POST', 'PUT'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def profile(request: Request) -> Response:
+    return Response({"msg": "You are authenticated bro"})
