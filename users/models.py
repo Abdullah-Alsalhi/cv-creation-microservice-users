@@ -52,7 +52,8 @@ class UserManager(BaseUserManager):
             self.model._meta.app_label, self.model._meta.object_name
         )
         username = GlobalUserModel.normalize_username(username)
-        user = self.model(username=username, email=email, **extra_fields)
+        user = self.model(username=username, email=email,
+                          **erequiremnets.txtxtra_fields)
         user.password = make_password(password)
         user.save(using=self._db)
         return user

@@ -10,20 +10,35 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import AccessToken
-from django.contrib.auth.base_user import BaseUserManager
+# from django.contrib.auth.base_user import BaseUserManager
+
+import random
+import string
+
+
+def generate_username(length: int) -> str:
+    """
+    This function generates a random username
+    consisting of a random combination of letters
+    and numbers.
+    """
+    username_length = length
+    username_chars = string.ascii_letters + string.digits
+    username = ''.join(random.choice(username_chars)
+                       for i in range(username_length))
+    return username
+
 
 # Create your views here.
-
 
 @api_view(['POST'])
 def register_user(request: Request) -> Response:
     """ register a new account """
 
     data = JSONParser().parse(request)
-
     if data['email']:
         data['email'] = data['email'].lower()
-
+    data['username'] = generate_username(8)
     serializer: SerializerUser = SerializerUser(data=data)
 
     if serializer.is_valid():
@@ -50,7 +65,7 @@ def login_user(request: Request) -> Response:
     user = authenticate(request, email=email, password=password)
 
     if user is None:
-        return Response({"errors:": "Wrong credentital provided"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"credential": ["Wrong credentital provided"]}, status=status.HTTP_400_BAD_REQUEST)
 
     token = str(AccessToken.for_user(user=user))
     user = model_to_dict(user, exclude=['password', 'data_joined'])

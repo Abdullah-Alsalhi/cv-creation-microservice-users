@@ -1,28 +1,108 @@
-# DJANGO-PROJECT
+# User System Registration
 
 ## Project Idea:
-Tech-Store is a store to sell technologies products
 
-
-
+Microservce system to register/login users.
 
 ## List of Services / Features:
 
-- Manage the Orders form customers.
-- Manage the Users registrations.
-- Manage online order easily!
+- Register user and assign JWT to him.
+- Login user and assign JWT to him.
 
+## To run this locally :
 
+- clone this repo
 
+```
+git clone https://github.com/Abdullah-Alsalhi/cv-creation-microservice-users.git
+```
 
-### Users allowed to
+- Insure to cd to the project directory
 
-- Customers : Create,  Delete Product order.
-- Admin: Create, Read, Update, Delete Products.
+```
+cd cv-creation-microservice-users
+```
 
+- Insure you have python >= 3.11.x
+- Inusure you have pip installed
+- Insure you are in virtual environment by running:
 
-### Customers
+```
+python3 -m venv venv
+```
 
-- Not registered & registered : View courses.
-- registered : Able to order a product and manage his order.
+- Insure to activate the virtual environment by running :
 
+```
+source venv/bin/activate
+```
+
+- Insure to install the requirments.txt
+
+```
+pip install -r requiremnets.txt
+```
+
+- Insure to run the app before request to it
+
+```
+python3 manage.py runserver
+```
+
+# Routes:
+
+- Post request to => http://localhost:8000/user/register/
+
+```
+REQUEST BODY => {
+    email: "YOUR_EMAIL",
+    password: "YOUR_PASSWORD"
+}
+
+```
+
+- On Faliure :
+
+```
+RESPONSE BODY => {
+    email: "Error message",
+    password: "Error messge"
+}
+```
+
+- On Success :
+
+```
+RESPONSE BODY => {
+    data: "User Data",
+    access_token: "JWT_TOKEN"
+}
+```
+
+- Post request to => http://localhost:8000/user/login/
+
+```
+REQUEST BODY => {
+    email: "YOUR_EMAIL",
+    password: "YOUR_PASSWORD"
+}
+
+```
+
+- On Faliure :
+
+```
+RESPONSE BODY => {
+    email: "Error message",
+    password: "Error messge"
+}
+```
+
+- On Success :
+
+```
+RESPONSE BODY => {
+    data: "User Data",
+    access_token: "JWT_TOKEN"
+}
+```
