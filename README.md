@@ -49,6 +49,21 @@ pip install -r requiremnets.txt
 python3 manage.py runserver
 ```
 
+## Run applicaiton using Docker 🐬 :
+
+- Build the docker image :
+
+``` shell
+docker build . -t cv-creation
+```
+
+- Run the image :
+
+``` shell
+docker run -d -p 8000:8000 cv-creation
+```
+
+
 # Routes:
 
 - Post request to => http://localhost:8000/user/register/
