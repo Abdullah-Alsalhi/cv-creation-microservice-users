@@ -23,7 +23,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ahmad75/fnace-fpm:2.9
+          images: ahmad75/fnace-fpm
       # -
       #   name: Login to DockerHub
       #   if: github.event_name != 'pull_request'
