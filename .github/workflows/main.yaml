@@ -24,6 +24,8 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ahmad75/fnace-fpm
+          tags: |
+            type=raw,value=latest,enable=true type=semver,pattern={{version}} 
       # -
       #   name: Login to DockerHub
       #   if: github.event_name != 'pull_request'
@@ -37,6 +39,7 @@ jobs:
             curent_tag=${{ steps.meta.outputs.tags }}
             new_tag=`echo $curent_tag + 0.1 | bc`
             echo "NEW_TAG=$(echo $new_tag)" >> $GITHUB_OUTPUT
+            echo $curent_tag
         id: tag_version
 
       # -
