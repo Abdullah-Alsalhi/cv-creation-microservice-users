@@ -21,7 +21,7 @@ jobs:
       -
         name: Docker meta
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action
         with:
           images: ahmad75/fnace-fpm
           tags: |
