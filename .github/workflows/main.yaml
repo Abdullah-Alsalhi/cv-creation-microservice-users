@@ -40,7 +40,7 @@ jobs:
             curent_tag=`curl -sL https://hub.docker.com/v2/repositories/ahmad75/fnace-fpm/tags?page_size=1000 | jq ".results[0].name" |  sed 's/"//g'`
             new_tag=`echo $curent_tag + 0.1 | bc`
             echo "NEW_TAG=$(echo $new_tag)" >> $GITHUB_OUTPUT
-            echo $curent_tag
+            echo $new_tag
         id: tag_version
 
       # -
