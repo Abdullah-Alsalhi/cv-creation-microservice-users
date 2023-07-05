@@ -18,15 +18,15 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v3
-      -
-        name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ahmad75/fnace-fpm
-          tags: |
-            type=raw,value=latest,enable=true
-            type=semver,pattern={{version}} 
+      # -
+      #   name: Docker meta
+      #   id: meta
+      #   uses: docker/metadata-action@v4
+      #   with:
+      #     images: ahmad75/fnace-fpm
+      #     tags: |
+      #       type=raw,value=latest,enable=true
+      #       type=semver,pattern={{version}} 
       # -
       #   name: Login to DockerHub
       #   if: github.event_name != 'pull_request'
@@ -37,7 +37,7 @@ jobs:
 
       - name: Get Tag Version 🔍️
         run: |
-            curent_tag=${{ steps.meta.outputs.tags }}
+            curent_tag=`curl -sL https://hub.docker.com/v2/repositories/ahmad75/fnace-fpm/tags?page_size=1000 | jq ".results[0].name" |  sed 's/"//g'`
             new_tag=`echo $curent_tag + 0.1 | bc`
             echo "NEW_TAG=$(echo $new_tag)" >> $GITHUB_OUTPUT
             echo $curent_tag
