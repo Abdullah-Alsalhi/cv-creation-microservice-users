@@ -21,11 +21,12 @@ jobs:
       -
         name: Docker meta
         id: meta
-        uses: docker/metadata-action
+        uses: docker/metadata-action@v4
         with:
           images: ahmad75/fnace-fpm
           tags: |
-            type=raw,value=latest,enable=true type=semver,pattern={{version}} 
+            type=raw,value=latest,enable=true
+            type=semver,pattern={{version}} 
       # -
       #   name: Login to DockerHub
       #   if: github.event_name != 'pull_request'
