@@ -29,7 +29,7 @@ jobs:
 
       - name: Get Tag Version 🔍️
         run: |
-            curent_tag=`curl -sL https://hub.docker.com/v2/repositories/ahmad75/cv-creation/tags?page_size=1000 | jq ".results[0].name" |  sed 's/"//g'`
+            curent_tag=`curl -sL https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/cv-creation/tags?page_size=1000 | jq ".results[0].name" |  sed 's/"//g'`
             new_tag=`echo $curent_tag + 0.1 | bc`
             echo "NEW_TAG=$(echo $new_tag)" >> $GITHUB_OUTPUT
             echo $new_tag
