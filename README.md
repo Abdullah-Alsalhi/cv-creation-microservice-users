@@ -43,6 +43,18 @@ source venv/bin/activate
 pip install -r requiremnets.txt
 ```
 
+- Create .env file
+
+``` shell
+cp .env.example .env
+```
+Make sure to write the database connection properties <b>DB_NAME</b> ,  <b>DB_USER</b> , <b>DB_PASSWORD</b>
+
+- Execute migreate command 
+``` shell
+python manage.py migrate
+```
+
 - Insure to run the app before request to it
 
 ```
@@ -60,7 +72,7 @@ docker build . -t cv-creation
 - Run the image :
 
 ``` shell
-docker run -d -p 8000:8000 cv-creation
+docker run -d -p 8000:8000  cv-creation
 ```
 
 
