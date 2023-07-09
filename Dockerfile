@@ -18,14 +18,21 @@ ARG DEBUG
 WORKDIR /opt/webapp
 RUN groupadd -r django \
   && useradd -d /opt/webapp -r -g django django \
-  && chown django:django -R /opt/webapp
+  && chown django:django -R /opt/webapp && \
+  echo "ENGINE=${ENGINE}" >> /opt/webapp/.env && \
+  echo "DB_NAME=${DB_NAME}">> /opt/webapp/.env && \
+  echo "DB_USER=${DB_USER}">> /opt/webapp/.env && \
+  echo "DB_PASSWORD=${DB_PASSWORD}">> /opt/webapp/.env && \
+  echo "DB_HOST=${DB_HOST}">> /opt/webapp/.env && \
+  echo "DB_PORT=${DB_PORT}">> /opt/webapp/.env
+
 USER django
 
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 COPY --chown=django:django . /opt/webapp/
-RUN python manage.py migrate
+
 
 # run the server
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
