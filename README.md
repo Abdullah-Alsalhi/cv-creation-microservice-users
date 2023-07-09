@@ -48,7 +48,9 @@ pip install -r requiremnets.txt
 ``` shell
 cp .env.example .env
 ```
-Make sure to write the database connection properties <b>DB_NAME</b> ,  <b>DB_USER</b> , <b>DB_PASSWORD</b>
+Make sure to write the database connection properties <b>DB_NAME</b> ,  <b>DB_USER</b> , <b>DB_PASSWORD</b>.
+
+You can change the database type by change the <b>ENGINE</b> value in .env file, by default is Postgres database.
 
 - Execute migreate command 
 ``` shell
@@ -62,17 +64,19 @@ python3 manage.py runserver
 ```
 
 ## Run applicaiton using Docker 🐬 :
+You have to install [docker-compose](https://docs.docker.com/compose/install/) in your machine fist.<br>
+Make sure the ports <b>8000</b> and <b>5432</b> are available.
 
-- Build the docker image :
+- Run the docker compose command:
 
 ``` shell
-docker build . -t cv-creation
+docker-compose up -d
 ```
 
-- Run the image :
+- Check the continer status:
 
 ``` shell
-docker run -d -p 8000:8000  cv-creation
+docker-compose ps
 ```
 
 
@@ -82,8 +86,8 @@ docker run -d -p 8000:8000  cv-creation
 
 ```
 REQUEST BODY => {
-    email: "YOUR_EMAIL",
-    password: "YOUR_PASSWORD"
+    "email": "YOUR_EMAIL",
+    "password": "YOUR_PASSWORD"
 }
 
 ```
@@ -92,8 +96,8 @@ REQUEST BODY => {
 
 ```
 RESPONSE BODY => {
-    email: "Error message",
-    password: "Error messge"
+    "email": "Error message",
+    "password": "Error messge"
 }
 ```
 
@@ -101,8 +105,8 @@ RESPONSE BODY => {
 
 ```
 RESPONSE BODY => {
-    data: "User Data",
-    access_token: "JWT_TOKEN"
+    "data": "User Data",
+    "access_token": "JWT_TOKEN"
 }
 ```
 
@@ -110,8 +114,8 @@ RESPONSE BODY => {
 
 ```
 REQUEST BODY => {
-    email: "YOUR_EMAIL",
-    password: "YOUR_PASSWORD"
+    "email": "YOUR_EMAIL",
+    "password": "YOUR_PASSWORD"
 }
 
 ```
@@ -120,8 +124,8 @@ REQUEST BODY => {
 
 ```
 RESPONSE BODY => {
-    email: "Error message",
-    password: "Error messge"
+    "email": "Error message",
+    "password": "Error messge"
 }
 ```
 
@@ -129,7 +133,7 @@ RESPONSE BODY => {
 
 ```
 RESPONSE BODY => {
-    data: "User Data",
-    access_token: "JWT_TOKEN"
+    "data": "User Data",
+    "access_token": "JWT_TOKEN"
 }
 ```
