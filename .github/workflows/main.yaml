@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'main'
-  #   tags:
-  #     - 'v*'
+      - 'dockerized'
+    tags:
+      - '*'
   # pull_request:
   #   branches:
   #     - 'master'
@@ -32,7 +32,8 @@ jobs:
             curent_tag=`curl -sL https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/cv-creation/tags?page_size=1000 | jq ".results[0].name" |  sed 's/"//g'`
             new_tag=`echo $curent_tag + 0.1 | bc`
             echo "NEW_TAG=$(echo $new_tag)" >> $GITHUB_OUTPUT
-            echo $new_tag
+            echo ${{ github.ref_name }}
+            echo ${{ github.ref }}
         id: tag_version
 
       -
