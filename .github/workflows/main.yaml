@@ -4,12 +4,9 @@ on:
   workflow_dispatch:
   push:
     # branches:
-    #   - 'dockerized'
+    #   - 'main'
     tags:
       - '*'
-  # pull_request:
-  #   branches:
-  #     - 'master'
 
 jobs:
   docker:
