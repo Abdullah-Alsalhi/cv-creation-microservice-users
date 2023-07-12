@@ -3,13 +3,10 @@ name: ci
 on:
   workflow_dispatch:
   push:
-    branches:
-      - 'main'
-  #   tags:
-  #     - 'v*'
-  # pull_request:
-  #   branches:
-  #     - 'master'
+    # branches:
+    #   - 'main'
+    tags:
+      - '*'
 
 jobs:
   docker:
@@ -27,13 +24,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Get Tag Version 🔍️
-        run: |
-            curent_tag=`curl -sL https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/cv-creation/tags?page_size=1000 | jq ".results[0].name" |  sed 's/"//g'`
-            new_tag=`echo $curent_tag + 0.1 | bc`
-            echo "NEW_TAG=$(echo $new_tag)" >> $GITHUB_OUTPUT
-            echo $new_tag
-        id: tag_version
+      # - name: Get Tag Version 🔍️
+      #   run: |
+      #       curent_tag=`curl -sL https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/cv-creation/tags?page_size=1000 | jq ".results[0].name" |  sed 's/"//g'`
+      #       new_tag=`echo $curent_tag + 0.1 | bc`
+      #       echo "NEW_TAG=$(echo $new_tag)" >> $GITHUB_OUTPUT
+      #   id: tag_version
 
       -
         name: Build and push
@@ -41,4 +37,4 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cv-creation:${{ steps.tag_version.outputs.NEW_TAG }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cv-creation:${{ github.ref_name }}
