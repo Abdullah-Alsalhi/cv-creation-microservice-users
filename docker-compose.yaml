@@ -38,11 +38,11 @@ services:
  # Django Continer
   web:
     build: .
-    container_name: web_app
+#    container_name: web_app
     depends_on:
       - init
     ports:
-      - "8000:8000"
+      - "8000-8999:8000"
     environment:
       ENGINE : django.db.backends.postgresql_psycopg2
       DB_NAME : cv_creation
