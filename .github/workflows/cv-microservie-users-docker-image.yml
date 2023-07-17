@@ -1,0 +1,37 @@
+name: CI build and push for cv-microservice-users docker image
+
+on:
+  workflow_dispatch:
+
+  push:
+    tags:
+      - v*.**
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Decrypt and write .env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" | base64 --decode > .env
+
+      - name: Build cv-microservice-users image
+        env:
+          REPO_NAME: ${{ github.repository }}
+        run: |
+          echo "Building cv-microservice-users image with tag ${{ github.ref_name }}"
+          REPO_NAME_LOWER=$(echo $REPO_NAME | tr '[:upper:]' '[:lower:]')
+          docker build --tag ghcr.io/$REPO_NAME_LOWER:${{ github.ref_name }} .
+
+      - name: Push cv-microservice-users image
+        env:
+          REPO_NAME: ${{ github.repository }}
+        run: |
+          echo "Pushing cv-microservice-users image with tag ${{ github.ref_name }}"
+          echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          REPO_NAME_LOWER=$(echo $REPO_NAME | tr '[:upper:]' '[:lower:]')
+          docker push ghcr.io/$REPO_NAME_LOWER:${{ github.ref_name }}
+          docker logout ghcr.io
