@@ -9,11 +9,10 @@ services:
     #   - /my/own/datadir:/var/lib/postgresql/data/
     restart: always
     environment:
-      POSTGRES_DB : cv_creation
-      POSTGRES_PASSWORD: Welcome411
+      POSTGRES_DB : ${DB_NAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
-
 
   init:
     build: .
@@ -24,13 +23,8 @@ services:
       - |
         sleep 10
         python manage.py migrate
-    environment:
-      ENGINE : django.db.backends.postgresql_psycopg2
-      DB_NAME : cv_creation
-      DB_USER : postgres
-      DB_PASSWORD : Welcome411
-      DB_HOST : pgsql
-      DB_PORT : 5432
+    env_file:
+      - .env
     depends_on:
       - pgsql 
 
@@ -43,14 +37,5 @@ services:
       - init
     ports:
       - "8000-8999:8000"
-    environment:
-      ENGINE : django.db.backends.postgresql_psycopg2
-      DB_NAME : cv_creation
-      DB_USER : postgres
-      DB_PASSWORD : Welcome411
-      DB_HOST : pgsql
-      DB_PORT : 5432
-      
-      
-      
-      
+    env_file:
+      - .env

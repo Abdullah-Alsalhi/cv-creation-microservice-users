@@ -18,13 +18,7 @@ ARG DEBUG
 WORKDIR /opt/webapp
 RUN groupadd -r django \
   && useradd -d /opt/webapp -r -g django django \
-  && chown django:django -R /opt/webapp && \
-  echo "ENGINE=${ENGINE}" >> /opt/webapp/.env && \
-  echo "DB_NAME=${DB_NAME}">> /opt/webapp/.env && \
-  echo "DB_USER=${DB_USER}">> /opt/webapp/.env && \
-  echo "DB_PASSWORD=${DB_PASSWORD}">> /opt/webapp/.env && \
-  echo "DB_HOST=${DB_HOST}">> /opt/webapp/.env && \
-  echo "DB_PORT=${DB_PORT}">> /opt/webapp/.env
+  && chown django:django -R /opt/webapp
 
 USER django
 
