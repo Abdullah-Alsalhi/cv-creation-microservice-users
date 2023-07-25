@@ -79,6 +79,36 @@ docker-compose up -d
 docker-compose ps
 ```
 
+## Run applicaiton using kubernetes ☸ :
+First of all make sure you has [Helm](https://helm.sh/docs/intro/install/) installed on your machine, becaues we will used to install the Postgres database deployment.
+
+Enter kubernetes directory in this project
+``` shell
+cd k8s/
+```
+
+Applying helm to run Postgres database.
+``` shell
+chmod u+x deploy_psql.sh
+./deploy_psql.sh
+```
+Make sure the postgres pod is running.
+```shell
+kubectl get pods
+```
+
+Apply the mainfests files of application.
+```shell
+kubectl apply -f .
+```
+
+Verified the status of pods
+```shell
+kubectl get pods
+```
+if everything is running, you can access the application throw,<br>
+http://localhost:31480
+
 
 # Routes:
 

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cv-creation
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cv-creation
+  template:
+    metadata:
+      labels:
+        app: cv-creation
+    spec:
+      securityContext:
+        fsGroup: 82
+      initContainers:
+        - name: database-migrations
+          image: ghcr.io/abdullah-alsalhi/cv-creation-microservice-users:main
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: cv-creation-config
+            - secretRef:
+                name: app-secret
+          command:
+            - "/bin/sh"
+          args:
+            - "-c"
+            # - "sleep 5"
+            - "python manage.py migrate"
+      containers:
+        - name: django
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: cv-creation-config
+            - secretRef:
+                name: app-secret
+          securityContext:
+            runAsUser: 82
+            readOnlyRootFilesystem: true
+          resources: {}
+          image: ghcr.io/abdullah-alsalhi/cv-creation-microservice-users:main
+          ports:
+            - containerPort: 8000

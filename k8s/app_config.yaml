@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cv-creation-config
+data:
+  ENGINE: django.db.backends.postgresql_psycopg2
+  DB_NAME: cv_creation
+  DB_USER: ahmed
+  DB_PORT: "5432"
+  DB_HOST: my-postgresql
