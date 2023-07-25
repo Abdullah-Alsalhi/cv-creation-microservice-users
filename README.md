@@ -92,6 +92,10 @@ Applying helm to run Postgres database.
 chmod u+x deploy_psql.sh
 ./deploy_psql.sh
 ```
+Make sure the postgres pod is running.
+```shell
+kubectl get pods
+```
 
 Apply the mainfests files of application.
 ```shell
